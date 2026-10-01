@@ -4,7 +4,7 @@ from .category import Category
 
 def upload_image_to(instance, filename):
   restaurant_id = instance.id
-  return os.path.join('static', 'restaurants', restaurant_id, filename)
+  return os.path.join('static', 'restaurants', str(restaurant_id), filename)
 
 class Restaurant(models.Model):
   id = models.AutoField(primary_key=True)
