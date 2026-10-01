@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block main %}
+
+  <div class="container my-5">
+    <div class="row">
+      <div class="col-12">
+        <h1>Account</h1>
+        <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+          <p>パスワード変更は<a href="/password/" class="text-primary">こちら</a></p>
+
+          <div class="d-flex align-items-center">
+            {% if not user.is_subscriber %}
+              <form method="POST" action="/pay/upgrade/">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-warning font-weight-bold text-dark shadow-sm mr-2">
+                  <i class="fas fa-crown mr-1"></i>有料プランにアップグレード
+                </button>
+              </form>
+            {% else %} 
+              <form method="POST" action="/pay/downgrade/">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-secondary font-weight-bold text-white shadow-sm mr-2">
+                  <i class="fas fa-user-slash mr-1"></i>有料プランを解約する
+                </button>
+              </form>
+            {% endif %}
+            <a href="/orders/" class="btn btn-info font-weight-bold text-white shadow-sm">
+              <i class="fas fa-history mr-1"></i>購入履歴
+            </a>
+          </div>
+        </div>
+
+        <form method="POST">
+          {% csrf_token %}
+          <div class="form-row">
+            <div class="form-group col-md-4">
+              <label>氏名</label>
+              <input class="form-control" type="text" name="name" value="{{user.name}}">
+            </div>
+            <div class="form-group col-md-4">
+              <label>フリガナ</label>
+              <input class="form-control" type="text" name="name_kana" value="{{user.name_kana}}">
+            </div>
+          </div>
+          <div class="form-row">
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-4">
+              <label>電話番号</label>
+              <input class="form-control" type="text" name="phone_number" value="{{user.phone_number}}">
+            </div>
+            <div class="form-group col-md-8">
+              <label>メールアドレス</label>
+              <input class="form-control" type="text" name="email" value="{{user.email}}">
+            </div>            
+          </div>
+          <button type="submit" class="btn btn-info shadow-sm">Save</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

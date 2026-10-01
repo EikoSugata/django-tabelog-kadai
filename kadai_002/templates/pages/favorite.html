@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block main %}
+
+  <div class="container">
+    <div class="row my-5">
+      <div class="col-12">
+        <h2>お気に入り一覧</h2>
+        {% if object_list|length != 0 %}
+          <table class="table mb-5 text-right table-striped">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col"></th>
+                <th scope="col">レストラン名</th>
+                <th scope="col">住所</th>
+                <th scope="col">電話番号</th>
+                <!-- <th scope="col"></th> -->
+              </tr>
+            </thead>
+            <tbody>
+              {% for object in object_list %}
+                <tr>
+                  <td>No.{{forloop.counter}}</td>
+                  <td class="text-center">
+                    {% if not object.image %} 
+                      <img src="{% static 'restaurants/noimage.png' %}">
+                    {% else %}
+                      <img src="/{{object.restaurant_id.image}}">
+                    {% endif %}
+                  </td>
+                  <td>{{object.restaurant_id.name}}</td>
+                  <td>{{object.restaurant_id.postal_code}} {{object.restaurant_id.address}}</td>
+                  <td>{{object.restaurant_id.phone_number}}</td>
+                  <!-- <td>
+                    <form action="/favorite/delete/{{ object.restaurant_id.pk }}/" method="POST">
+                      {% csrf_token %}
+                      <button type="submit" class="my-auto btn btn-secondary btn-sm shadow-sm">お気に入り解除</button>
+                    </form>
+                  </td> -->
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+
+        {% else %}
+          <p>お気に入りがありません。</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

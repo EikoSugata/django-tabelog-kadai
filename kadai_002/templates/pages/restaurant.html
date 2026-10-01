@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block main %}
+  <!-- 左側(画像) -->
+  <div class="container">
+    <div class="row my-5">
+      <div class="col-12 col-lg-6">
+        <div class="bg-white border overflow-hidden">
+          {% if not object.image %} 
+            <img src="{% static 'restaurants/noimage.png' %}" width="100%">
+          {% else %}
+            <img src="/{{object.image}}" width="100%">
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- 右側(詳細) -->
+      <div class="col-12 col-lg-6">
+        <div class="border p-3 text-left text-dark overflow-hidden">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <h2 class="display-5">{{object.name}}</h2>
+              <p class="lead">
+                <a href="/categories/{{object.category_id.pk}}/"
+                  class="badge badge-pill badge-warning">{{object.category_id.name}}</a>
+              </p>
+            </div>
+
+            {% if user.is_subscriber %}
+              <div>
+                {% if not is_favorite %}
+                  <form action="/favorite/add/{{ object.pk }}/" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-secondary border-0 p-2 shadow-none" title="お気に入り追加">
+                      <i class="far fa-heart fa-2x text-secondary"></i>
+                    </button>
+                  </form>
+                {% else %}
+                    <form action="/favorite/delete/{{ object.pk }}/" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-danger border-0 p-2 shadow-none" title="お気に入り解除">
+                      <i class="fas fa-heart fa-2x text-danger"></i>
+                    </button>
+                  </form>
+                {% endif %}
+              </div>            
+            {% endif %}
+          </div>
+        
+          <p class="lead">住所：〒{{object.postal_code}} {{object.address}}</p>
+          <p class="lead">電話番号：{{object.phone_number}}</p>
+          <p class="lead">営業時間：{{object.open_time}}~{{object.close_time}}</p>
+          <p class="lead">{{object.description}}</p>
+
+          {% if user.is_subscriber %}
+            <form action="/reserve/add/{{ object.pk }}/" method="POST">
+              {% csrf_token %}
+              <p>
+                予約日時：<input type="datetime-local" name="reserve_at" step="900" required>
+                <span class="text-danger small ml-2">※15分刻みで入力してください</span>
+              </p>
+              <p>予約人数：<input type="number" name="people_num" min="1" step="1" required> 人</p>
+              <p><button type="submit" class="btn btn-info shadow-sm">予約</button></p>
+            </form>
+          {% endif %}
+        </div>
+      </div>  
+    </div>
+
+    <!-- レビュー -->
+    <div class="row my-5 text-left text-dark">
+      <div class="col-12 mb-3">
+        <h2 class="display-5">レビュー一覧</h2>
+        {% if review_list|length != 0 %}
+          <table class="table mb-5 text-left table-striped">
+            <thead>
+              <tr>
+                <th style="width: 10%;">投稿者</th>
+                <th style="width: 15%;">投稿日</th>
+                <th style="width: 15%;">評価</th>
+                <th style="width: 50%;">レビュー内容</th>
+                <th style="width: 10%;"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for review in review_list %}
+                <tr>
+                  <td>{{ review.user_id.username }}</td>
+                  <td>{{ review.created_at |date }}</td>
+                  <td>
+                    <span class="text-warning">
+                      {% if review.star_num == 5 %}
+                        ★★★★★
+                      {% elif review.star_num == 4 %}
+                        ★★★★☆
+                      {% elif review.star_num == 3 %}
+                        ★★★☆☆
+                      {% elif review.star_num == 2 %}
+                        ★★☆☆☆
+                      {% elif review.star_num == 1 %}
+                        ★☆☆☆☆                      
+                      {% endif %}
+                    </span>
+                  </td>
+                  <td>{{ review.memo }}</td>
+                  <td>
+                    {% if review.user_id == request.user %}
+                      <form action="/review/delete/{{ object.pk }}/" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="my-auto btn btn-secondary btn-sm shadow-sm">削除</button>
+                      </form>
+                    {% endif %}
+                  </td>
+                </tr>
+              {% endfor %}              
+            </tbody>
+          </table>   
+      
+        {% else %}
+          <p>レビューがありません。</p>
+        {% endif %}
+      </div>
+    </div>
+
+    {% if user.is_subscriber %}
+      <div class="row my-5 text-left text-dark">
+        <div class="col-12 mb-3">
+          <h2 class="display-5">レビュー投稿</h2>
+          <form action="/review/add/{{ object.pk }}/" method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label>評価</label>
+              <select name="star_num" class="form-select w-auto" required>
+                <option value="" selected disabled>評価を選択してください</option>
+                <option value="5">★★★★★ (5 - 最高)</option>
+                <option value="4">★★★★☆ (4 - 良い)</option>
+                <option value="3">★★★☆☆ (3 - 普通)</option>
+                <option value="2">★★☆☆☆ (2 - いまいち)</option>
+                <option value="1">★☆☆☆☆ (1 - 悪い)</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label>レビュー内容</label>
+              <textarea name="memo" rows="4" class="form-content form-control" placeholder="お店の感想や料理の味について入力してください" required></textarea>
+            </div>
+            <div class="text-end">
+              <button type="submit" class="btn btn-info shadow-sm">投稿する</button>
+            </div>
+        </form>
+      </div>
+    {% endif %}
+    
+  </div>
+{% endblock %}

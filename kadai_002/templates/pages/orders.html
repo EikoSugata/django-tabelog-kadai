@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block main %}
+
+  <div class="container my-5">
+    <div class="row">
+      <div class="col-12">
+        <h1>Orders</h1>
+        {% if object_list|length != 0 %}
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">No.</th>
+                <th scope="col">サブスク期間</th>
+                <th scope="col">内容</th>
+                <th scope="col">合計金額</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for object in object_list %}
+                <tr>
+                  <td>{{forloop.counter}}</td>
+                  <td>{{object.subscription_start_at|date:"Y/m/d"}} ~ {{object.subscription_end_at|date:"Y/m/d"}}</td>
+                  <td>NAGOYAMESHI有料会員(月額)</td>
+                  <td>¥{{object.amount}}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+
+        {% else %}
+          <p>購入履歴がありません。</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

@@ -1,0 +1,48 @@
+<div class="py-1 bg-danger ">
+  <nav class="container-fluid d-flex flex-column flex-md-row justify-content-between">
+    <!-- 左側 -->
+    <div class="d-flex align-items-center">
+      <a class="py-2 text-white font-weight-bold mr-4" href="/">
+        <i class="fas fa-utensils"></i>
+        {{ TITLE }}
+        <i class="fas fa-utensils"></i>
+      </a>
+      {% if user.is_authenticated %}
+        <p class="py-2 mb-0 d-none d-md-inline-block text-white mr-5"><strong>ようこそ、{{user.username}}さん</strong></p>
+      {% endif %}
+      </div>
+
+    <!-- 右側 -->
+    <div class="d-flex align-items-center">
+      {% if user.is_authenticated %}
+        {% if user.is_subscriber %}
+          <a class="py-2 d-none d-md-inline-block text-white ml-3" href="/reserve/">
+            <i class="fas fa-calendar-alt mr-1"></i>Reserve
+          </a>
+          <a class="py-2 d-none d-md-inline-block text-white ml-3" href="/favorite/">
+            <i class="fas fa-heart mr-1"></i>Favorite
+            {% if FAVORITE_COUNT > 0 %}
+              <span class="badge badge-pill badge-dark">
+                {{ FAVORITE_COUNT }}
+              </span>
+            {% endif %}
+          </a>
+        {% endif %}
+        
+        <a class="py-2 d-none d-md-inline-block text-white ml-3" href="/account/">
+          <i class="fas fa-user mr-1"></i>Account
+        </a>
+        <a class="py-2 d-none d-md-inline-block text-white ml-3" href="/logout/">
+          <i class="fas fa-right-from-bracket"></i>Logout
+        </a>
+      {% else %}
+        <a class="py-2 d-none d-md-inline-block text-white ml-3" href="/login/">
+          <i class="fas fa-right-to-bracket mr-1"></i>Login
+        </a>
+        <a class="py-2 d-none d-md-inline-block text-white ml-3" href="/signup/">
+          <i class="fas fa-user-plus mr-1"></i>SignUp
+        </a>
+      {% endif %}
+    </div>
+  </nav>
+</div>
