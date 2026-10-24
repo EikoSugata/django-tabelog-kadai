@@ -25,9 +25,9 @@
                   <td>No.{{forloop.counter}}</td>
                   <td class="text-center">
                     {% if not object.image %} 
-                      <img src="{% static 'restaurants/noimage.png' %}">
+                      <img src="{% static 'restaurants/noImage.png' %}">
                     {% else %}
-                      <img src="/{{object.restaurant_id.image}}">
+                      <img src="{{object.restaurant_id.image.url}}">
                     {% endif %}
                   </td>
                   <td>{{object.restaurant_id.name}}</td>

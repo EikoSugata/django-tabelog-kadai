@@ -3,9 +3,9 @@
 <a href="/restaurants/{{object.pk}}/">
   <div class="border">
     {% if not object.image %} 
-      <img src="{% static 'restaurants/noimage.png' %}" width="100%" class=" bg-white">
+      <img src="{% static 'restaurants/noImage.png' %}" width="100%" class=" bg-white">
     {% else %}
-      <img src="/{{object.image}}" width="100%" class=" bg-white">
+      <img src="{{object.image.url}}" width="100%" class=" bg-white">
     {% endif %}
 
     <div class="text-center text-secondary overflow-hidden">
