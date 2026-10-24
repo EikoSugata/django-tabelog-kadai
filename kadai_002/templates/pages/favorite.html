@@ -24,14 +24,15 @@
                 <tr>
                   <td>No.{{forloop.counter}}</td>
                   <td class="text-center">
-                    {% if not object.image %} 
-                      <img src="{% static 'restaurants/noImage.png' %}">
+                    {% if not object.restaurant_id.image %} 
+                      <img src="{% static 'restaurants/noImage.png' %}" width="120px">
                     {% else %}
-                      <img src="{{object.restaurant_id.image.url}}">
+                      <img src="{{object.restaurant_id.image.url}}" width="120px">
                     {% endif %}
                   </td>
                   <td>{{object.restaurant_id.name}}</td>
-                  <td>{{object.restaurant_id.postal_code}} {{object.restaurant_id.address}}</td>
+                  <td>〒{{object.restaurant_id.postal_code}}<br/>
+                    {{object.restaurant_id.address}}</td>
                   <td>{{object.restaurant_id.phone_number}}</td>
                   <!-- <td>
                     <form action="/favorite/delete/{{ object.restaurant_id.pk }}/" method="POST">

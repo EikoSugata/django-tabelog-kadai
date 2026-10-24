@@ -26,14 +26,15 @@
                 <tr>
                   <td>No.{{forloop.counter}}</td>
                   <td class="text-center">
-                    {% if not object.image %} 
-                      <img src="{% static 'restaurants/noImage.png' %}" height="100px">
+                    {% if not object.restaurant_id.image %} 
+                      <img src="{% static 'restaurants/noImage.png' %}" width="100px">
                     {% else %}
-                      <img src="{{object.restaurant_id.image.url}}">
+                      <img src="{{object.restaurant_id.image.url}}" width="100px">
                     {% endif %}
                   </td>
                   <td>{{object.restaurant_id.name}}</td>
-                  <td>{{object.restaurant_id.postal_code}} {{object.restaurant_id.address}}</td>
+                  <td>〒{{object.restaurant_id.postal_code}}<br/>
+                    {{object.restaurant_id.address}}</td>
                   <td>{{object.restaurant_id.phone_number}}</td>
                   <td>{{object.reserve_at}}</td>
                   <td>{{object.people_num}}</td>
